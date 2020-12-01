@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# 接收git-commit传过来的参数 message
+fileName=$1
+message=$(<$fileName)
+
+# 获取当前分支名
+branchName=$(git symbolic-ref --short HEAD)
+
+# 获取当前路径
+project_path=$(cd `dirname $0`; pwd)
+# 拼接python路径
+python_dir_path="/scripts/commit_msg.py"
+python_path=$project_path$python_dir_path
+
+# 执行python
+python $python_path $message $branchName
+
+# shell 接收python脚本参数
+if [ $? == "0" ];then
+exit 0
+else
+exit 1
+fi
+
+
+
