@@ -3,6 +3,11 @@ import sys
 import time
 import httplib
 import math
+import re
+
+regular_list = ['\\[new\\](.*)', '\\[fix\\](.*)',
+                '\\[update\\](.*)', 'server(.*)',
+                'Merge(.*)', 'Revert(.*)']
 
 
 def getServerTime():
@@ -26,8 +31,8 @@ def getServerTime():
 
 
 def parseArgument():
-    if len(sys.argv) < 2:
-        raise Exception("参数是必须的")
+    if len(sys.argv) < 3:
+        raise Exception("参数错误：长度小于3")
     return {"message": sys.argv[1], "branch": sys.argv[2]}
 
 
@@ -38,6 +43,24 @@ if __name__ == '__main__':
     print "*" * 32
 
     if commit_branch == "master":
+
+        # 检查提交格式
+        flag_format = False
+        for reg in regular_list:
+            if re.match(reg, commit_message):
+                flag_format = True
+                break
+        if not flag_format:
+            print "\nxxx 提交信息格式不正确，请核查后重新提交 xxx"
+            print('\n请参考以下格式重新提交:')
+            print('[new]加入xx功能')
+            print('[update]修改xx逻辑')
+            print('[fix]解决xx功能bug\n')
+            print "*" * 32
+            print "\n"
+            exit(1)
+
+        # 检查提交时间
         serverTime = getServerTime()
         if serverTime == -1:
             print "*" * 32
@@ -61,7 +84,7 @@ if __name__ == '__main__':
             print "\n"
             exit(1)
 
-    print "\n时间校验结束，没有发现问题\n"
+    print "\n提交检查结束，没有发现问题，你是最棒的！\n"
     print "*" * 35
     print "\n"
     exit(0)
