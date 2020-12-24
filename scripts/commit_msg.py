@@ -33,7 +33,15 @@ def getServerTime():
 def parseArgument():
     if len(sys.argv) < 3:
         raise Exception("参数错误：长度小于3")
-    return {"message": sys.argv[1], "branch": sys.argv[2]}
+
+    msg = ""
+    index = 0
+    for i in sys.argv:
+        if index > 1:
+            msg += i
+        index += 1
+
+    return {"branch": sys.argv[1], "message": msg}
 
 
 if __name__ == '__main__':

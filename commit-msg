@@ -14,7 +14,7 @@ python_dir_path="/scripts/commit_msg.py"
 python_path=$project_path$python_dir_path
 
 # 执行python
-python $python_path $message $branchName
+python $python_path $branchName $message
 
 # shell 接收python脚本参数
 if [ $? == "0" ];then
